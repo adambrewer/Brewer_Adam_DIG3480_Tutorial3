@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
      public Transform shotSpawn;
      public float fireRate;
 
+	public AudioSource sounds;
+	public AudioClip laserSound;
+
      private float nextFire;
      private Rigidbody rb;
 
@@ -33,6 +36,9 @@ public class PlayerController : MonoBehaviour
 		{
 			nextFire = Time.time + fireRate;
 			Instantiate (shot, shotSpawn.position, shotSpawn.rotation);
+
+			sounds.clip = laserSound;
+			sounds.Play();
 		}
 	}
 
