@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(AudioSource))]
 public class GameController : MonoBehaviour
 {
 	public GameObject[] hazards;
@@ -13,8 +14,13 @@ public class GameController : MonoBehaviour
 	public float startWait;
 	public float waveWait;
 
+public AudioClip bgMusic;
+public AudioClip winClip;
+public AudioClip loseClip;
+
 	public Text ScoreText;
 	private int score;
+	private bool timerOff;
 	
 	public Text restartText;
 	public Text gameOverText;
@@ -30,10 +36,14 @@ public class GameController : MonoBehaviour
 	gameOverMan = false;
 	restart = false;
 	youWin = false;
+	timerOff = false;
 	winText.text = "";
 	restartText.text = "";
 	gameOverText.text ="";
 	score = 0;
+AudioSource audio = GetComponent<AudioSource>();
+        audio.Play();
+
 void UpdateScore()
 {
 ScoreText.text = "Points: " + score;
@@ -50,6 +60,13 @@ if (restart)
 		if (Input.GetKeyDown(KeyCode.T))
 		{
 			SceneManager.LoadScene("SampleScene");
+		}
+	}
+	if (timerOff == false)
+	{	
+		if (Input.GetKeyDown(KeyCode.U))
+		{
+		timerOff = true;
 		}
 	}
 }
@@ -94,10 +111,15 @@ public void AddScore(int newScoreValue)
 {
 score += newScoreValue;
 UpdateScore();
-if (score >= 100)
+	if (timerOff == false)
+{
+	if (score >= 100)
 	{
 	youWin = true;
 	winText.text = "You Win!  Game created by Adam Brewer.";
+	GetComponent<AudioSource>().clip = winClip;
+       	GetComponent<AudioSource>().Play();
+}
 	}
 }
 
@@ -105,6 +127,8 @@ public void gameOver()
 	{
 		gameOverText.text = "Game Over!";
 		gameOverMan = true;
+		GetComponent<AudioSource>().clip = loseClip;
+       		GetComponent<AudioSource>().Play();
 	}
 
 
